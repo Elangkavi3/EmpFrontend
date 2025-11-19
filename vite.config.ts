@@ -7,5 +7,13 @@ export default defineConfig({
   server :{
     port : 3001,
     open : true
+  },
+  build: {
+    rollupOptions: {
+      input: {
+        main: './index.html',
+        notfound: './404.html'
+      }
+    }
   }
 })
