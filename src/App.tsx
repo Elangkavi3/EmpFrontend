@@ -1,6 +1,6 @@
 // src/App.tsx
 import { Routes, Route, BrowserRouter as Router, Navigate } from 'react-router-dom';
-import { ThemeProvider, createTheme, CssBaseline } from '@mui/material';
+import { ThemeProvider, createTheme, CssBaseline, Box, Button, Typography } from '@mui/material';
 import LoginPage from './pages/Auth/LoginPage';
 import RegisterPage from './pages/Auth/RegisterPage';
 import AdminDashboard from './pages/Admin/AdminDashboard';
@@ -8,52 +8,40 @@ import EmployeeDashboard from './pages/Employee/EmployeeDashboard';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import './App.css';
 import type { JSX } from 'react';
-import { CircularProgress, Box } from '@mui/material';
+import { CircularProgress } from '@mui/material';
 
-// Create a Material-UI theme
+// ------------------ THEME ------------------
 const theme = createTheme({
   palette: {
-    primary: {
-      main: '#1976d2',
-    },
-    secondary: {
-      main: '#dc004e',
-    },
-    background: {
-      default: '#f5f5f5',
-    },
+    primary: { main: '#1976d2' },
+    secondary: { main: '#dc004e' },
+    background: { default: '#f5f5f5' }
   },
   typography: {
-    h4: {
-      fontWeight: 'bold',
-    },
-    h6: {
-      fontWeight: 'bold',
-    },
-  },
+    h4: { fontWeight: 'bold' },
+    h6: { fontWeight: 'bold' }
+  }
 });
 
-const ProtectedRoute = ({ children, requiredRole }: { children: JSX.Element; requiredRole?: 'ADMIN' | 'HR' | 'EMPLOYEE' | 'ADMIN/HR' }) => {
+// ------------------ PROTECTED ROUTE ------------------
+const ProtectedRoute = ({
+  children,
+  requiredRole
+}: {
+  children: JSX.Element;
+  requiredRole?: 'ADMIN' | 'HR' | 'EMPLOYEE' | 'ADMIN/HR';
+}) => {
   const { user, loading } = useAuth();
-  
+
   if (loading) {
     return (
-      <Box 
-        sx={{ 
-          display: 'flex', 
-          justifyContent: 'center', 
-          alignItems: 'center', 
-          height: '100vh' 
-        }}
-      >
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
         <CircularProgress />
       </Box>
     );
   }
 
-  if (!user) {
-    return <Navigate to="/login" replace />;
-  }
+  if (!user) return <Navigate to="/login" replace />;
 
   if (requiredRole) {
     if (requiredRole === 'ADMIN/HR') {
@@ -68,64 +56,97 @@ const ProtectedRoute = ({ children, requiredRole }: { children: JSX.Element; req
   return children;
 };
 
+// ------------------ UNAUTHORIZED PAGE ------------------
 const UnauthorizedPage = () => (
-  <Box 
-    sx={{ 
-      display: 'flex', 
-      justifyContent: 'center', 
-      alignItems: 'center', 
+  <Box
+    sx={{
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
       height: '100vh',
       flexDirection: 'column',
-      gap: 2
+      gap: 2,
+      textAlign: 'center'
     }}
   >
-    <h1>401 - Unauthorized</h1>
-    <p>You don't have permission to access this page.</p>
-    <Navigate to="/login" replace />
+    <Typography variant="h4" color="error">
+      401 - Unauthorized
+    </Typography>
+    <Typography>You don’t have permission to access this page.</Typography>
+    <Button variant="contained" color="primary" href="/EmpFrontend/login">
+      Go to Login
+    </Button>
   </Box>
 );
 
+// ------------------ 404 PAGE ------------------
+const NotFoundPage = () => (
+  <Box
+    sx={{
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      height: '100vh',
+      flexDirection: 'column',
+      gap: 2,
+      textAlign: 'center',
+      px: 2
+    }}
+  >
+    <Typography variant="h3" color="primary" fontWeight="bold">
+      404 - Page Not Found
+    </Typography>
+    <Typography variant="body1" sx={{ maxWidth: 400 }}>
+      The page you’re looking for doesn’t exist or has been moved.
+    </Typography>
+    <Button variant="contained" color="secondary" href="/EmpFrontend/login">
+      Back to Login
+    </Button>
+  </Box>
+);
+
+// ------------------ MAIN APP ------------------
 function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <div className="App">
-        <Router>
-          <AuthProvider>
-            <Routes>
-              {/* Default Redirect */}
-              <Route path="/EmpFrontend/" element={<Navigate to="/login" replace />} />
 
-              {/* Auth Pages */}
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/register" element={<RegisterPage />} />
-              <Route path="/unauthorized" element={<UnauthorizedPage />} />
+      <Router basename="/EmpFrontend">
+        <AuthProvider>
+          <Routes>
+            {/* Redirect root → login */}
+            <Route path="/" element={<Navigate to="/login" replace />} />
 
-              {/* Protected Dashboard Routes */}
-              <Route
-                path="/admin/*"
-                element={
-                  <ProtectedRoute requiredRole="ADMIN/HR">
-                    <AdminDashboard />
-                  </ProtectedRoute>
-                }
-              />
+            {/* Auth Pages */}
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+            <Route path="/unauthorized" element={<UnauthorizedPage />} />
 
-              <Route
-                path="/employee/*"
-                element={
-                  <ProtectedRoute requiredRole="EMPLOYEE">
-                    <EmployeeDashboard />
-                  </ProtectedRoute>
-                }
-              />
+            {/* Admin Routes */}
+            <Route
+              path="/admin/*"
+              element={
+                <ProtectedRoute requiredRole="ADMIN/HR">
+                  <AdminDashboard />
+                </ProtectedRoute>
+              }
+            />
 
-              {/* 404 Page */}
-              <Route path="*" element={<div>404 - Page Not Found</div>} />
-            </Routes>
-          </AuthProvider>
-        </Router>
-      </div>
+            {/* Employee Routes */}
+            <Route
+              path="/employee/*"
+              element={
+                <ProtectedRoute requiredRole="EMPLOYEE">
+                  <EmployeeDashboard />
+                </ProtectedRoute>
+              }
+            />
+
+            {/* 404 */}
+            <Route path="*" element={<NotFoundPage />} />
+          </Routes>
+        </AuthProvider>
+      </Router>
     </ThemeProvider>
   );
 }
