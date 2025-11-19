@@ -1,7 +1,7 @@
 // src/services/employeeService.ts
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:5000/api';
+const API_BASE_URL = 'https://empbackend-pj7o.onrender.com/api';
 
 // Get employee profile
 export const getEmployeeProfile = async (userId: number) => {

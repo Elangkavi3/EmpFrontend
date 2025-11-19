@@ -814,6 +814,8 @@ const MotionPaper = motion(Paper);
 const MotionButton = motion(Button);
 const MotionCard = motion(Card);
 
+const API_BASE_URL = 'https://empbackend-pj7o.onrender.com/api';
+
 interface ProjectAssignment {
   assign_id: number;
   name: string;
@@ -986,7 +988,7 @@ const EmployeeProjects: React.FC = () => {
     setLoading(true);
     setApiError('');
     try {
-      const response = await fetch(`http://localhost:5000/api/employee/projects?emp_id=${user.emp_id}`, {
+      const response = await fetch(`${API_BASE_URL}/employee/projects?emp_id=${user.emp_id}`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
           'Content-Type': 'application/json',
@@ -1018,7 +1020,7 @@ const EmployeeProjects: React.FC = () => {
 
     setLogsLoading(true);
     try {
-      const response = await fetch(`http://localhost:5000/api/employee/project-logs?emp_id=${user.emp_id}`, {
+      const response = await fetch(`${API_BASE_URL}/employee/project-logs?emp_id=${user.emp_id}`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
           'Content-Type': 'application/json',
@@ -1063,7 +1065,7 @@ const EmployeeProjects: React.FC = () => {
   // API call to submit form data
   const submitProjectLog = async (data: EmployeeProjects) => {
     try {
-      const response = await fetch('http://localhost:5000/api/employee/project-logs', {
+      const response = await fetch(`${API_BASE_URL}/employee/project-logs`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

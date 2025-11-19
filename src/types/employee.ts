@@ -1,7 +1,7 @@
 // src/services/employeeService.ts
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:5000/api';
+const API_BASE_URL = 'https://empbackend-pj7o.onrender.com/api';
 
 // Attendance APIs - all expect employee ID (number)
 export const getTodayAttendance = async (empId: number) => {

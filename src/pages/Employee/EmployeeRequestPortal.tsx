@@ -608,6 +608,8 @@ const MotionPaper = motion(Paper);
 const MotionButton = motion(Button);
 const MotionCard = motion(Card);
 
+const API_BASE_URL = 'https://empbackend-pj7o.onrender.com/api';
+
 interface Request {
   request_id: number;
   category: string;
@@ -681,7 +683,7 @@ const EmployeeRequestPortal: React.FC = () => {
     setErrorMessage('');
 
     try {
-      const response = await fetch(`http://localhost:5000/api/employee/requests`, {
+      const response = await fetch(`${API_BASE_URL}/employee/requests`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
@@ -715,7 +717,7 @@ const EmployeeRequestPortal: React.FC = () => {
     setErrorMessage('');
 
     try {
-      const response = await fetch(`http://localhost:5000/api/employee/requests`, {
+      const response = await fetch(`${API_BASE_URL}/employee/requests`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -747,7 +749,7 @@ const EmployeeRequestPortal: React.FC = () => {
     setSuccessMessage('');
 
     try {
-      const response = await fetch(`http://localhost:5000/api/employee/requests/feedback`, {
+      const response = await fetch(`${API_BASE_URL}/employee/requests/feedback`, {
         method: 'PUT',
         headers: { 
           'Content-Type': 'application/json',

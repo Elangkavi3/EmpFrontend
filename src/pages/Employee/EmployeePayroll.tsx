@@ -1181,6 +1181,7 @@ const EmployeePayroll: React.FC = () => {
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const API_BASE_URL = 'https://empbackend-pj7o.onrender.com/api';
 
   /* -------------------------------------------------------
      Year + Month Arrays
@@ -1258,7 +1259,7 @@ const EmployeePayroll: React.FC = () => {
           return;
         }
 
-        let url = "http://localhost:5000/api/employee/payroll";
+        let url = `${API_BASE_URL}/employee/payroll`;
         const params = new URLSearchParams();
 
         if (filters?.month) params.append("month", filters.month);
@@ -1318,7 +1319,7 @@ const EmployeePayroll: React.FC = () => {
       const month = (d.getMonth() + 1).toString();
       const year = d.getFullYear().toString();
 
-      let url = "http://localhost:5000/api/employee/payroll/payslip";
+      let url = `${API_BASE_URL}/employee/payroll/payslip`;
       const params = new URLSearchParams();
       params.append("month", month);
       params.append("year", year);
