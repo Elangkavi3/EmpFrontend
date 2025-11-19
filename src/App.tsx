@@ -94,7 +94,7 @@ function App() {
           <AuthProvider>
             <Routes>
               {/* Default Redirect */}
-              <Route path="/" element={<Navigate to="/login" replace />} />
+              <Route path="/EmpFrontend/" element={<Navigate to="/login" replace />} />
 
               {/* Auth Pages */}
               <Route path="/login" element={<LoginPage />} />
